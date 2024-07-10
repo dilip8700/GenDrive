@@ -13,7 +13,7 @@ generation_config = {
     "top_p": 0.95,
     "top_k": 64,
     "max_output_tokens": 100000,
-    "response_mime_type": "text/plain",
+    "response_mime_type": "application/json",
 }
 
 model = genai.GenerativeModel(
@@ -35,9 +35,8 @@ def detect_objects_in_image(filepath):
     )
 
     response = chat_session.send_message(
-        "Analyze the image and detect objects. Provide the output in JSON format."
+        "Analyze the image very deeply each and every pixel of the image and detect objects there color also and very deeply understand the object and also tell there position where they are located"
     )
 
     return response.text  # Assuming response.text is already in JSON format
-
 
