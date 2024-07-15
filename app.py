@@ -3,6 +3,7 @@ import os
 from images.object_detection_image import detect_objects_in_image
 from images.image_summary import summarize_content_of_image
 from videos.video_summary import summarize_video
+from documents.document_summarize import summarize_document
 
 app = Flask(__name__)
 
@@ -71,6 +72,30 @@ def summarize_video_endpoint():
 
     os.remove(filepath)  # Clean up the uploaded file
     return jsonify({"summary": summary})
+
+@app.route('/summarize-document', methods=['POST'])
+def summarize_document_endpoint():
+    if 'document' not in request.files:
+        return jsonify({"error": "No document uploaded"}), 400
+
+    file = request.files['document']
+    if file.filename == '':
+        return jsonify({"error": "No document selected"}), 400
+
+    filepath = os.path.join("/tmp", file.filename)
+    file.save(filepath)
+
+    try:
+        summary = summarize_document(filepath)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        os.remove(filepath)
+
+    return jsonify({"summary": summary})
+
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
