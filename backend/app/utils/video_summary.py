@@ -1,10 +1,9 @@
-# video_summary.py
-
 import os
 import time
 import google.generativeai as genai
+from app.config import Config
 
-genai.configure(api_key="AIzaSyCF8LRXPCW6HnNqSMdut-PQqek4nruTpvE")
+genai.configure(api_key=Config.GENAI_API_KEY)
 
 def upload_to_gemini(path, mime_type=None):
     """Uploads the given file to Gemini."""

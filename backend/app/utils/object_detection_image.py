@@ -1,13 +1,15 @@
 import google.generativeai as genai
+from app.config import Config
 
 # Configure the Generative AI with your API key
-genai.configure(api_key="AIzaSyCF8LRXPCW6HnNqSMdut-PQqek4nruTpvE")
+genai.configure(api_key=Config.GENAI_API_KEY)
 
 def upload_to_gemini(path, mime_type=None):
     """Uploads a file to Gemini."""
     file = genai.upload_file(path, mime_type=mime_type)
     return file
 
+# Model configuration for generative AI
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -21,8 +23,8 @@ model = genai.GenerativeModel(
     generation_config=generation_config,
 )
 
-def summarize_content_of_image(filepath):
-    """Create A Summary of an image using Generative AI."""
+def detect_objects_in_image(filepath):
+    """Detects objects in an image using Generative AI."""
     gemini_file = upload_to_gemini(filepath, mime_type="image/jpeg")
 
     chat_session = model.start_chat(
@@ -35,8 +37,7 @@ def summarize_content_of_image(filepath):
     )
 
     response = chat_session.send_message(
-        "Analyze the image and create a deep summary about this image."
+        "Analyze the image very deeply each and every pixel of the image and detect objects, their colors, and their positions."
     )
 
     return response.text  # Assuming response.text is already in JSON format
-
